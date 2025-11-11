@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semester Grade Calculator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(120deg, #2563eb 0%, #7c3aed 100%);
+      min-height: 100vh;
+      padding: 30px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      max-width: 650px;
+      width: 100%;
+      padding: 35px;
+    }
+    
+    h1 {
+      color: #1e293b;
+      font-size: 1.8em;
+      margin-bottom: 8px;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.9em;
+      margin-bottom: 25px;
+    }
+    
+    .subject {
+      background: #f8fafc;
+      padding: 18px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s ease;
+    }
+    
+    .subject:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .subject-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .subject-name {
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 0.95em;
+    }
+    
+    .coef-badge {
+      background: #e0e7ff;
+      color: #4f46e5;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8em;
+      font-weight: 600;
+    }
+    
+    .inputs {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .input-field {
+      flex: 1;
+    }
+    
+    label {
+      display: block;
+      font-size: 0.8em;
+      color: #64748b;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.95em;
+      transition: all 0.2s ease;
+      background: white;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+    
+    input::placeholder {
+      color: #cbd5e1;
+    }
+    
+    .result {
+      display: none;
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 0.85em;
+      font-weight: 600;
+      border-radius: 6px;
+      text-align: center;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      font-size: 1em;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      display: block;
+      margin: 25px auto 0;
+      width: 100%;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .final-result {
+      display: none;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      margin-top: 25px;
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+      transition: all 0.4s ease;
+    }
+    
+    .final-result.excellent {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    }
+    
+    .final-result.very-good {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+    }
+    
+    .final-result.good {
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+    }
+    
+    .final-result.pass {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+    }
+    
+    .final-result.fail {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+    }
+    
+    .final-result h2 {
+      font-size: 1.1em;
+      margin-bottom: 12px;
+      font-weight: 600;
+      opacity: 0.95;
+    }
+    
+    .average {
+      font-size: 3em;
+      font-weight: 700;
+      margin: 15px 0;
+      letter-spacing: -1px;
+    }
+    
+    .status {
+      font-size: 1.1em;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎓 Semester Calculator</h1>
+    <p class="subtitle">Enter your scores (0-20)</p>
+    
+    <div id="subjects-container"></div>
+    
+    <button onclick="calculateAverage()">Calculate Average</button>
+    
+    <div class="final-result" id="final-result">
+      <h2>Your Semester Average</h2>
+      <div class="average" id="average-number">0.00</div>
+      <div class="status" id="status-message"></div>
+    </div>
+  </div>
+
+  <script>
+    const subjects = [
+      { name: "Embedded Systems", coefficient: 3, evaluation: "both" },
+      { name: "Digital Signal Processors", coefficient: 3, evaluation: "both" },
+      { name: "HPC", coefficient: 3, evaluation: "both" },
+      { name: "Computer Networks", coefficient: 2, evaluation: "both" },
+      { name: "Embedded Systems Lab", coefficient: 1, evaluation: "continuous" },
+      { name: "Digital Signal Processors Lab", coefficient: 1, evaluation: "continuous" },
+      { name: "HPC Lab", coefficient: 1, evaluation: "continuous" },
+      { name: "Computer Networks Lab", coefficient: 1, evaluation: "continuous" },
+      { name: "Project Management", coefficient: 1, evaluation: "exam" },
+      { name: "Communication Skills", coefficient: 1, evaluation: "exam" },
+    ];
+
+    const container = document.getElementById('subjects-container');
+    subjects.forEach((subject, index) => {
+      const div = document.createElement('div');
+      div.className = 'subject';
+      
+      let inputsHTML = '';
+      if (subject.evaluation === 'both') {
+        inputsHTML = `
+          <div class="inputs">
+            <div class="input-field">
+              <label>Test (40%)</label>
+              <input type="number" id="test-${index}" min="0" max="20" step="0.5" placeholder="0-20">
+            </div>
+            <div class="input-field">
+              <label>Exam (60%)</label>
+              <input type="number" id="exam-${index}" min="0" max="20" step="0.5" placeholder="0-20">
+            </div>
+          </div>
+        `;
+      } else if (subject.evaluation === 'continuous') {
+        inputsHTML = `
+          <div class="inputs">
+            <div class="input-field">
+              <label>Continuous Assessment</label>
+              <input type="number" id="continuous-${index}" min="0" max="20" step="0.5" placeholder="0-20">
+            </div>
+          </div>
+        `;
+      } else if (subject.evaluation === 'exam') {
+        inputsHTML = `
+          <div class="inputs">
+            <div class="input-field">
+              <label>Exam Score</label>
+              <input type="number" id="exam-${index}" min="0" max="20" step="0.5" placeholder="0-20">
+            </div>
+          </div>
+        `;
+      }
+      
+      div.innerHTML = `
+        <div class="subject-header">
+          <div class="subject-name">${subject.name}</div>
+          <div class="coef-badge">Coef ${subject.coefficient}</div>
+        </div>
+        ${inputsHTML}
+        <div class="result" id="result-${index}"></div>
+      `;
+      container.appendChild(div);
+    });
+
+    function calculateAverage() {
+      let totalWeightedScore = 0;
+      let totalCoefficient = 0;
+      let isValid = true;
+
+      subjects.forEach((subject, index) => {
+        const { coefficient, evaluation } = subject;
+        let grade = 0;
+
+        if (evaluation === 'both') {
+          const test = parseFloat(document.getElementById(`test-${index}`).value);
+          const exam = parseFloat(document.getElementById(`exam-${index}`).value);
+
+          if (isNaN(test) || isNaN(exam) || test < 0 || test > 20 || exam < 0 || exam > 20) {
+            isValid = false;
+            return;
+          }
+          grade = (test * 0.4) + (exam * 0.6);
+        } else if (evaluation === 'continuous') {
+          const continuous = parseFloat(document.getElementById(`continuous-${index}`).value);
+
+          if (isNaN(continuous) || continuous < 0 || continuous > 20) {
+            isValid = false;
+            return;
+          }
+          grade = continuous;
+        } else if (evaluation === 'exam') {
+          const exam = parseFloat(document.getElementById(`exam-${index}`).value);
+
+          if (isNaN(exam) || exam < 0 || exam > 20) {
+            isValid = false;
+            return;
+          }
+          grade = exam;
+        }
+
+        totalWeightedScore += grade * coefficient;
+        totalCoefficient += coefficient;
+
+        const resultDiv = document.getElementById(`result-${index}`);
+        resultDiv.style.display = 'block';
+        resultDiv.textContent = `Subject Average: ${grade.toFixed(2)}/20`;
+      });
+
+      if (!isValid) {
+        alert('⚠️ Please fill all fields with valid scores between 0 and 20!');
+        return;
+      }
+
+      const average = totalWeightedScore / totalCoefficient;
+      
+      const finalResult = document.getElementById('final-result');
+      const averageNumber = document.getElementById('average-number');
+      const statusMessage = document.getElementById('status-message');
+      
+      averageNumber.textContent = average.toFixed(2) + '/20';
+      
+      // Remove all classes first
+      finalResult.className = 'final-result';
+      
+      // Add class based on average and set message
+      if (average >= 16) {
+        finalResult.classList.add('excellent');
+        statusMessage.textContent = '🌟 Outstanding Performance!';
+      } else if (average >= 14) {
+        finalResult.classList.add('very-good');
+        statusMessage.textContent = '🎉 Very Good!';
+      } else if (average >= 12) {
+        finalResult.classList.add('good');
+        statusMessage.textContent = '👍 Good Work!';
+      } else if (average >= 10) {
+        finalResult.classList.add('pass');
+        statusMessage.textContent = '✅ Pass!';
+      } else {
+        finalResult.classList.add('fail');
+        statusMessage.textContent = '💪 Keep Improving!';
+      }
+      
+      finalResult.style.display = 'block';
+      finalResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  </script>
+</body>
+</html>
